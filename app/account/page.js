@@ -15,26 +15,25 @@ export default function AccountPage() {
 
   useEffect(() => {
     async function load() {
-      let { data } = await supabase.auth.getUser();
+      const { data: sessionData } = await supabase.auth.getSession();
+let user = sessionData.session?.user || null;
 
-      // No session at all yet? Create an anonymous one automatically —
-      // no email, no waiting, no rate limit.
-      if (!data.user) {
-        const { data: anon, error: anonError } = await supabase.auth.signInAnonymously();
-        if (anonError) {
-          setError(anonError.message);
-          setLoading(false);
-          return;
-        }
-        data = { user: anon.user };
-      }
+if (!user) {
+  const { data: anon, error: anonError } = await supabase.auth.signInAnonymously();
+  if (anonError) {
+    setError(anonError.message);
+    setLoading(false);
+    return;
+  }
+  user = anon.user;
+}
 
-      setAuthUser(data.user);
+setAuthUser(user);
 
       const { data: row } = await supabase
         .from("users")
         .select("*")
-        .eq("id", data.user.id)
+        .eq("id", user.id)
         .maybeSingle();
       setProfile(row || null);
       setLoading(false);
