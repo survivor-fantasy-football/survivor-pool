@@ -43,20 +43,28 @@ export default function AccountPage() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const completeProfile = async (e) => {
-    e.preventDefault();
-    setError("");
-    if (!name.trim() || !email.trim()) {
-      setError("Enter your name and email.");
-      return;
-    }
-    const { data, error } = await supabase
-      .from("users")
-      .insert({ id: authUser.id, email: email.trim(), name: name.trim() })
-      .select()
-      .single();
-    if (error) setError(error.message);
-    else setProfile(data);
-  };
+  e.preventDefault();
+  setError("");
+  if (!name.trim() || !email.trim()) {
+    setError("Enter your name and email.");
+    return;
+  }
+  const { data: userRow, error: userError } = await supabase
+    .from("users")
+    .insert({ id: authUser.id, email: email.trim(), name: name.trim() })
+    .select()
+    .single();
+  if (userError) {
+    setError(userError.message);
+    return;
+  }
+  // Every account starts with one entry automatically.
+  await supabase
+    .from("entries")
+    .insert({ user_id: authUser.id, entry_number: 1 });
+
+  setProfile(userRow);
+};
 
   if (loading) return <Shell><p>Loading…</p></Shell>;
 
