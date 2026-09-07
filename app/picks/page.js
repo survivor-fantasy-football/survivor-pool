@@ -18,11 +18,12 @@ export default function PicksPage() {
 
   useEffect(() => {
     async function load() {
-      const { data: authData } = await supabase.auth.getUser();
-      if (!authData.user) {
-        window.location.href = "/account";
-        return;
-      }
+      const { data: sessionData } = await supabase.auth.getSession();
+if (!sessionData.session) {
+  window.location.href = "/account";
+  return;
+}
+const authData = { user: sessionData.session.user };
       const { data: entryRows } = await supabase
         .from("entries")
         .select("*")
