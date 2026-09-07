@@ -1,0 +1,26 @@
+:root {
+  --turf: #1E3D2F;
+  --turf-dark: #152B21;
+  --chalk: #F6F3EC;
+  --wood: #B98A4E;
+  --wood-dark: #8C6836;
+  --danger: #B23A2E;
+  --gold: #D9A441;
+  --ink: #1C1C1C;
+  --ink-soft: #5B5B54;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--chalk);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+input, button {
+  font-family: inherit;
+}
