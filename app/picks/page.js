@@ -63,8 +63,8 @@ export default function PicksPage() {
   const requiredPicks = settings.multi_pick_enabled && week >= settings.multi_pick_start_week ? 2 : 1;
   const currentWeekPicks = myPicks.filter((p) => p.week === week);
   const currentTeams = currentWeekPicks.map((p) => p.team);
-  const usedTeams = new Set(myPicks.filter((p) => p.week !== week).map((p) => p.team));
-
+  const usedTeams = new Set(myPicks.filter((p) => p.week !== week && p.team !== "NO PICK").map((p) => p.team));
+  
   // Deadline lock
   const now = new Date();
   let weekLocked = false;
